@@ -1,10 +1,13 @@
 import { DateTime } from "luxon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export function DatePicker() {
+export function DatePicker(props: { onChange: (newTime: DateTime) => void }) {
   const [selectedDateTime, setSelectedDateTime] = useState<DateTime>(
-    DateTime.now()
+    DateTime.now().startOf("day")
   );
+  useEffect(() => {
+    props.onChange(selectedDateTime);
+  }, [selectedDateTime]);
   const daysOfTheMonth = getDaysOfTheMonth(selectedDateTime);
 
   return (

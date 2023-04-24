@@ -2,6 +2,7 @@ import "@testing-library/jest-dom/extend-expect";
 import { DatePicker } from "./DatePicker";
 import { render, screen } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
+import { DateTime } from "luxon";
 
 describe("Datepicker", () => {
   const daysOfTheMonth = [
@@ -19,7 +20,7 @@ describe("Datepicker", () => {
   });
 
   it("Shows every day of the month", () => {
-    render(<DatePicker />);
+    render(<DatePicker onChange={jest.fn()} />);
 
     daysOfTheMonth.forEach((day) => {
       expect(screen.getByText(day)).toBeInTheDocument();
@@ -27,19 +28,19 @@ describe("Datepicker", () => {
   });
 
   it("Starts with the current month/year selected", () => {
-    render(<DatePicker />);
+    render(<DatePicker onChange={jest.fn()} />);
 
     expect(screen.getByText("January 2023")).toBeInTheDocument();
   });
 
   it("Starts with the current day selected", () => {
-    render(<DatePicker />);
+    render(<DatePicker onChange={jest.fn()} />);
 
     expect(screen.getByLabelText("1")).toBeChecked();
   });
 
   it("Allows going forward months", () => {
-    render(<DatePicker />);
+    render(<DatePicker onChange={jest.fn()} />);
 
     selectNextMonth();
 
@@ -47,7 +48,7 @@ describe("Datepicker", () => {
   });
 
   it("Allows going backwards months", () => {
-    render(<DatePicker />);
+    render(<DatePicker onChange={jest.fn()} />);
 
     selectPreviousMonth();
 
@@ -55,7 +56,7 @@ describe("Datepicker", () => {
   });
 
   it("Shows correct days on the calendar for the selected month", async () => {
-    render(<DatePicker />);
+    render(<DatePicker onChange={jest.fn()} />);
 
     // Should now show Feb, 2023 - which has 28 days, not 31
     selectNextMonth();
@@ -64,7 +65,7 @@ describe("Datepicker", () => {
   });
 
   it("Allows the user to select a new day", async () => {
-    render(<DatePicker />);
+    render(<DatePicker onChange={jest.fn()} />);
 
     const theFifteenth = screen.getByText("15");
 
@@ -76,7 +77,20 @@ describe("Datepicker", () => {
     expect(screen.getByLabelText("15")).toBeChecked();
   });
 
-  // onChange Prop
+  it("Calls the onChange prop when a new date is selected", async () => {
+    const mockOnChange = jest.fn();
+    render(<DatePicker onChange={mockOnChange} />);
+
+    const theFifteenth = screen.getByText("15");
+
+    act(() => {
+      theFifteenth.click();
+    });
+
+    expect(mockOnChange).toHaveBeenCalledWith(
+      DateTime.now().set({ day: 15 }).startOf("day")
+    );
+  });
 });
 
 function selectNextMonth() {
