@@ -66,7 +66,21 @@ describe("Datepicker", () => {
     expect(screen.getByText("December 2022")).toBeInTheDocument();
   });
 
-  // Going backwards months
+  it("Shows correct days on the calendar for the selected month", async () => {
+    render(<DatePicker />);
+
+    // Should now show Feb, 2023 - which has 28 days, not 31
+    const nextMonthButton = screen.getByRole("button", {
+      description: "Next Month",
+    });
+
+    act(() => {
+      nextMonthButton.click();
+    });
+
+    expect(screen.queryByText("31")).not.toBeInTheDocument();
+  });
+
   // When the month changes so do the days on the calendar
   // Selecting new days
   // onChange Prop
