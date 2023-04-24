@@ -41,13 +41,7 @@ describe("Datepicker", () => {
   it("Allows going forward months", () => {
     render(<DatePicker />);
 
-    const nextMonthButton = screen.getByRole("button", {
-      description: "Next Month",
-    });
-
-    act(() => {
-      nextMonthButton.click();
-    });
+    selectNextMonth();
 
     expect(screen.getByText("February 2023")).toBeInTheDocument();
   });
@@ -55,13 +49,7 @@ describe("Datepicker", () => {
   it("Allows going backwards months", () => {
     render(<DatePicker />);
 
-    const nextMonthButton = screen.getByRole("button", {
-      description: "Previous Month",
-    });
-
-    act(() => {
-      nextMonthButton.click();
-    });
+    selectPreviousMonth();
 
     expect(screen.getByText("December 2022")).toBeInTheDocument();
   });
@@ -70,18 +58,43 @@ describe("Datepicker", () => {
     render(<DatePicker />);
 
     // Should now show Feb, 2023 - which has 28 days, not 31
-    const nextMonthButton = screen.getByRole("button", {
-      description: "Next Month",
-    });
-
-    act(() => {
-      nextMonthButton.click();
-    });
+    selectNextMonth();
 
     expect(screen.queryByText("31")).not.toBeInTheDocument();
   });
 
-  // When the month changes so do the days on the calendar
-  // Selecting new days
+  it("Allows the user to select a new day", async () => {
+    render(<DatePicker />);
+
+    const theFifteenth = screen.getByText("15");
+
+    act(() => {
+      theFifteenth.click();
+    });
+
+    expect(screen.getByLabelText("1")).not.toBeChecked();
+    expect(screen.getByLabelText("15")).toBeChecked();
+  });
+
   // onChange Prop
 });
+
+function selectNextMonth() {
+  const nextMonthButton = screen.getByRole("button", {
+    description: "Next Month",
+  });
+
+  act(() => {
+    nextMonthButton.click();
+  });
+}
+
+function selectPreviousMonth() {
+  const nextMonthButton = screen.getByRole("button", {
+    description: "Previous Month",
+  });
+
+  act(() => {
+    nextMonthButton.click();
+  });
+}

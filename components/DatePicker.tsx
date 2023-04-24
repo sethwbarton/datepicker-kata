@@ -5,13 +5,7 @@ export function DatePicker() {
   const [selectedDateTime, setSelectedDateTime] = useState<DateTime>(
     DateTime.now()
   );
-
-  const daysOfTheMonth = Array.from(
-    Array(selectedDateTime.daysInMonth).keys()
-  ).map((n) => {
-    return n + 1;
-  });
-  console.log(daysOfTheMonth);
+  const daysOfTheMonth = getDaysOfTheMonth(selectedDateTime);
 
   return (
     <div>
@@ -28,20 +22,36 @@ export function DatePicker() {
       />
       {daysOfTheMonth.map((day) => {
         return (
-          <DayButton key={day} day={day} checked={day === DateTime.now().day} />
+          <DayButton
+            key={day}
+            day={day}
+            checked={day === selectedDateTime.day}
+            selectedDateTime={selectedDateTime}
+            setSelectedDateTime={setSelectedDateTime}
+          />
         );
       })}
     </div>
   );
 }
 
-function DayButton(props: { day: number; checked: boolean }) {
+function DayButton(props: {
+  day: number;
+  checked: boolean;
+  selectedDateTime: DateTime;
+  setSelectedDateTime: (newTime: DateTime) => void;
+}) {
   return (
     <>
       <input
         type={"radio"}
         id={`${props.day}-button`}
         checked={props.checked}
+        onClick={() => {
+          props.setSelectedDateTime(
+            props.selectedDateTime.set({ day: props.day })
+          );
+        }}
       />
       <label htmlFor={`${props.day}-button`}>{props.day}</label>
     </>
@@ -78,4 +88,10 @@ function NextMonthButton(props: {
       Next Month
     </button>
   );
+}
+
+function getDaysOfTheMonth(selectedDateTime: DateTime) {
+  return Array.from(Array(selectedDateTime.daysInMonth).keys()).map((n) => {
+    return n + 1;
+  });
 }
