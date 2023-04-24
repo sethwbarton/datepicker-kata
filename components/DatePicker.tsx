@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 export function DatePicker() {
   return (
     <div>
-      <label>January</label>
+      <label>January 2023</label>
       {daysOfTheMonth.map((day) => {
         return (
           <DayButton key={day} day={day} checked={day === DateTime.now().day} />

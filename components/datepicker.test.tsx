@@ -25,13 +25,19 @@ describe("Datepicker", () => {
     });
   });
 
-  it("Starts with the current month selected", () => {
+  it("Starts with the current month/year selected", () => {
     render(<DatePicker />);
 
-    expect(screen.getByText("January")).toBeInTheDocument();
+    expect(screen.getByText("January 2023")).toBeInTheDocument();
   });
 
   it("Starts with the current day selected", () => {
+    render(<DatePicker />);
+
+    expect(screen.getByLabelText("1")).toBeChecked();
+  });
+
+  it("Allows going forward months", () => {
     render(<DatePicker />);
 
     expect(screen.getByLabelText("1")).toBeChecked();
