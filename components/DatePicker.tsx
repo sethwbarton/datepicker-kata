@@ -1,9 +1,20 @@
 import { DateTime } from "luxon";
+import { useState } from "react";
 
 export function DatePicker() {
+  const [selectedDateTime, setSelectedDateTime] = useState<DateTime>(
+    DateTime.now()
+  );
+
   return (
     <div>
-      <label>January 2023</label>
+      <label>{selectedDateTime.monthLong} 2023</label>
+      <button
+        title={"Next Month"}
+        onClick={() => setSelectedDateTime(selectedDateTime.plus({ month: 1 }))}
+      >
+        Next Month
+      </button>
       {daysOfTheMonth.map((day) => {
         return (
           <DayButton key={day} day={day} checked={day === DateTime.now().day} />

@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom/extend-expect";
 import { DatePicker } from "./DatePicker";
 import { render, screen } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 
 describe("Datepicker", () => {
   const daysOfTheMonth = [
@@ -40,6 +41,14 @@ describe("Datepicker", () => {
   it("Allows going forward months", () => {
     render(<DatePicker />);
 
-    expect(screen.getByLabelText("1")).toBeChecked();
+    const nextMonthButton = screen.getByRole("button", {
+      description: "Next Month",
+    });
+
+    act(() => {
+      nextMonthButton.click();
+    });
+
+    expect(screen.getByText("February 2023")).toBeInTheDocument();
   });
 });
