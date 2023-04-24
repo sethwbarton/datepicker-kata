@@ -5,10 +5,10 @@ export function DatePicker(props: { onChange: (newTime: DateTime) => void }) {
   const [selectedDateTime, setSelectedDateTime] = useState<DateTime>(
     DateTime.now().startOf("day")
   );
+
   useEffect(() => {
     props.onChange(selectedDateTime);
-  }, [selectedDateTime]);
-  const daysOfTheMonth = getDaysOfTheMonth(selectedDateTime);
+  }, [selectedDateTime, props]);
 
   return (
     <div>
@@ -23,7 +23,7 @@ export function DatePicker(props: { onChange: (newTime: DateTime) => void }) {
         setSelectedDateTime={setSelectedDateTime}
         selectedDateTime={selectedDateTime}
       />
-      {daysOfTheMonth.map((day) => {
+      {getDaysOfTheMonth(selectedDateTime).map((day) => {
         return (
           <DayButton
             key={day}

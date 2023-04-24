@@ -5,11 +5,6 @@ import { act } from "react-dom/test-utils";
 import { DateTime } from "luxon";
 
 describe("Datepicker", () => {
-  const daysOfTheMonth = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-  ];
-
   beforeEach(() => {
     // Make every test think it's Jan 2, 2023
     jest.useFakeTimers().setSystemTime(new Date("2023-01-02T00:00:00Z"));
@@ -22,7 +17,12 @@ describe("Datepicker", () => {
   it("Shows every day of the month", () => {
     render(<DatePicker onChange={jest.fn()} />);
 
-    daysOfTheMonth.forEach((day) => {
+    const daysInJanuary = [
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+      22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+    ];
+
+    daysInJanuary.forEach((day) => {
       expect(screen.getByText(day)).toBeInTheDocument();
     });
   });
@@ -67,11 +67,7 @@ describe("Datepicker", () => {
   it("Allows the user to select a new day", async () => {
     render(<DatePicker onChange={jest.fn()} />);
 
-    const theFifteenth = screen.getByText("15");
-
-    act(() => {
-      theFifteenth.click();
-    });
+    selectDay("15");
 
     expect(screen.getByLabelText("1")).not.toBeChecked();
     expect(screen.getByLabelText("15")).toBeChecked();
@@ -81,17 +77,21 @@ describe("Datepicker", () => {
     const mockOnChange = jest.fn();
     render(<DatePicker onChange={mockOnChange} />);
 
-    const theFifteenth = screen.getByText("15");
-
-    act(() => {
-      theFifteenth.click();
-    });
+    selectDay("15");
 
     expect(mockOnChange).toHaveBeenCalledWith(
       DateTime.now().set({ day: 15 }).startOf("day")
     );
   });
 });
+
+function selectDay(dayToSelect: string) {
+  const dayButton = screen.getByText(dayToSelect);
+
+  act(() => {
+    dayButton.click();
+  });
+}
 
 function selectNextMonth() {
   const nextMonthButton = screen.getByRole("button", {
