@@ -1,8 +1,21 @@
+import { DateTime } from "luxon";
+
 export function DatePicker() {
   return (
     <div>
+      <label>January</label>
       {daysOfTheMonth.map((day) => {
-        return <div key={day}>{day}</div>;
+        return day === DateTime.now().day ? (
+          <>
+            <input type={"radio"} id={`${day}-button`} checked={true} />
+            <label htmlFor={`${day}-button`}>{day}</label>
+          </>
+        ) : (
+          <>
+            <input type={"radio"} id={`${day}-button`} />
+            <label htmlFor={`${day}-button`}>{day}</label>
+          </>
+        );
       })}
     </div>
   );

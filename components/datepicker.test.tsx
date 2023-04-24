@@ -10,7 +10,7 @@ describe("Datepicker", () => {
 
   beforeEach(() => {
     // Make every test think it's Jan 2, 2023
-    jest.useFakeTimers().setSystemTime(new Date("2023-01-02"));
+    jest.useFakeTimers().setSystemTime(new Date("2023-01-02T00:00:00Z"));
   });
 
   afterEach(() => {
@@ -23,5 +23,17 @@ describe("Datepicker", () => {
     daysOfTheMonth.forEach((day) => {
       expect(screen.getByText(day)).toBeInTheDocument();
     });
+  });
+
+  it("Starts with the current month selected", () => {
+    render(<DatePicker />);
+
+    expect(screen.getByText("January")).toBeInTheDocument();
+  });
+
+  it("Starts with the current day selected", () => {
+    render(<DatePicker />);
+
+    expect(screen.getByLabelText("1")).toBeChecked();
   });
 });
