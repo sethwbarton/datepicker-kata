@@ -8,7 +8,17 @@ export function DatePicker() {
 
   return (
     <div>
-      <label>{selectedDateTime.monthLong} 2023</label>
+      <button
+        title={"Previous Month"}
+        onClick={() =>
+          setSelectedDateTime(selectedDateTime.minus({ month: 1 }))
+        }
+      >
+        Previous Month
+      </button>
+      <label>
+        {selectedDateTime.monthLong} {selectedDateTime.year}
+      </label>
       <button
         title={"Next Month"}
         onClick={() => setSelectedDateTime(selectedDateTime.plus({ month: 1 }))}

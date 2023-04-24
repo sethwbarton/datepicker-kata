@@ -51,4 +51,23 @@ describe("Datepicker", () => {
 
     expect(screen.getByText("February 2023")).toBeInTheDocument();
   });
+
+  it("Allows going backwards months", () => {
+    render(<DatePicker />);
+
+    const nextMonthButton = screen.getByRole("button", {
+      description: "Previous Month",
+    });
+
+    act(() => {
+      nextMonthButton.click();
+    });
+
+    expect(screen.getByText("December 2022")).toBeInTheDocument();
+  });
+
+  // Going backwards months
+  // When the month changes so do the days on the calendar
+  // Selecting new days
+  // onChange Prop
 });
